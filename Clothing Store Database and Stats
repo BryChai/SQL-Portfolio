@@ -1,0 +1,27 @@
+-create a database table and insert values
+
+CREATE TABLE store (id INTEGER PRIMARY KEY, name TEXT, inventory INTEGER);
+
+INSERT INTO store VALUES
+
+(1, 'floral shirt', 20),
+(2, 'jeans', 15),
+(3, 'plain shirt', 30),
+(4, 'flannel', 30),
+(5, 'pajama top', 20),
+(6, 'pajama bottom', 20),
+(7, 'cargo pants', 10),
+(8, 'jackets', 5),
+(9, 'hoodies', 10),
+(10, 'sweatpants', 15),
+(11, 'sweatshirt', 10),
+(12, 'cardigan', 10),
+(13, 'button-up shirt', 20),
+(14, 'assorted underwear', 30),
+(15, 'hats', 10);
+
+-Display database by number of inventory
+SELECT * FROM store ORDER BY inventory desc;
+
+-What is the total number of items we have in our inventory?
+SELECT SUM (inventory) FROM store;
