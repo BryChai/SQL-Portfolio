@@ -41,15 +41,21 @@ INSERT INTO marvels VALUES(25, "Juggernaut", 76, "Neutral", "Male", 2.87, 862, "
 INSERT INTO marvels VALUES(26, "Professor X", 58, "Good", "Male", 1.83, 86, "EUA", 5, 2, 2, 2, 5, 3);
 SELECT * FROM marvels;
 
+#1. I am using aggregating functions to figure out the average height, the tallest height and shortest height of all of the marvel characters listed and grouping the results by gender.
+
 SELECT gender, ROUND(AVG(height_m)) AS avg_height_m FROM marvels GROUP by gender;
 
 SELECT name, gender, MIN(height_m) AS min_height_m FROM marvels GROUP by gender;
 
 SELECT name, gender, MAX(height_m) AS min_height_m FROM marvels GROUP by gender;
 
+#2. I am now incorperating the HAVING function in order to sort all of the female marvel characters by their total stats.
+
 SELECT name, SUM(intelligence + strength + speed + durability + energy_Projection + fighting_Skills) AS total_Stats FROM marvels
     GROUP BY name
     HAVING gender = 'Female' AND total_Stats > 20;
+    
+#3. I am using the CASE function to organize and catagorize all of the characters by their popularity ranking and giving them a status that coressponds to that popularity number. 
     
 SELECT name, popularity,
 
@@ -60,6 +66,8 @@ SELECT name, popularity,
     END "hero_Status"
     FROM marvels
     GROUP BY "name";
+    
+#4. I am finally using AND/OR functions to find marvel characters that fit the conditions and traits given in the query.
     
 SELECT name, alignment, fighting_Skills FROM marvels WHERE
     alignment = "Good" AND fighting_Skills > 5;
