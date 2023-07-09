@@ -1,0 +1,115 @@
+/* I created three tables of data, each with different information about my characters, but each of them having relatable chartacteristics with one another */
+
+CREATE TABLE persons (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    fullname TEXT,
+    age INTEGER,
+    hometown TEXT);
+    
+INSERT INTO persons (fullname, age, hometown) VALUES ('Kane Houghton', 17, 'Olympus');
+INSERT INTO persons (fullname, age, hometown) VALUES ('Red Soing', 25, 'Athens');
+INSERT INTO persons (fullname, age, hometown) VALUES ('Brian Hair', 13, 'Olympus');
+INSERT INTO persons (fullname, age, hometown) VALUES ('Harry Springer', 20, 'Olympus');
+INSERT INTO persons (fullname, age, hometown) VALUES ('Rebecca Black', 19, 'Athens');
+INSERT INTO persons (fullname, age, hometown) VALUES ('Sandy Dior', 51, 'Greece');
+INSERT INTO persons (fullname, age, hometown) VALUES ('Katherine Pond', 27, 'Athens');
+INSERT INTO persons (fullname, age, hometown) VALUES ('Albert Wice', 24, 'Athens');
+INSERT INTO persons (fullname, age, hometown) VALUES ('James Allen', 65, 'Olympus');
+INSERT INTO persons (fullname, age, hometown) VALUES ('Orianna Blace', 21, 'Athens');
+INSERT INTO persons (fullname, age, hometown) VALUES ('Sire John', 60, 'Olympus');
+INSERT INTO persons (fullname, age, hometown) VALUES ('Blake Gold', 26, 'Greece');
+INSERT INTO persons (fullname, age, hometown) VALUES ('Sally Mae', 41, 'Greece');
+INSERT INTO persons (fullname, age, hometown) VALUES ('Ork Lowe', 47, 'Greece');
+INSERT INTO persons (fullname, age, hometown) VALUES ('Sam Morey', 35, 'Athens');
+INSERT INTO persons (fullname, age, hometown) VALUES ('Lyre Bail', 31, 'Athens');
+INSERT INTO persons (fullname, age, hometown) VALUES ('Sakado Han', 17, 'Greece');
+INSERT INTO persons (fullname, age, hometown) VALUES ('True Tale', 14, 'Olympus');
+INSERT INTO persons (fullname, age, hometown) VALUES ('Jake Park', 21, 'Greece');
+INSERT INTO persons (fullname, age, hometown) VALUES ('Laurie Strode', 29, 'Olympus');
+
+CREATE table house_affiliation (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    person_id INTEGER,
+    name TEXT);
+    
+INSERT INTO house_affiliation (person_id, name) VALUES (1, "blue");
+INSERT INTO house_affiliation (person_id, name) VALUES (2, "blue");
+INSERT INTO house_affiliation (person_id, name) VALUES (3, "red");
+INSERT INTO house_affiliation (person_id, name) VALUES (4, "blue");
+INSERT INTO house_affiliation (person_id, name) VALUES (5, "green");
+INSERT INTO house_affiliation (person_id, name) VALUES (6, "red");
+INSERT INTO house_affiliation (person_id, name) VALUES (7, "yellow");
+INSERT INTO house_affiliation (person_id, name) VALUES (8, "green");
+INSERT INTO house_affiliation (person_id, name) VALUES (9, "yellow");
+INSERT INTO house_affiliation (person_id, name) VALUES (10, "blue");
+INSERT INTO house_affiliation (person_id, name) VALUES (11, "red");
+INSERT INTO house_affiliation (person_id, name) VALUES (12, "red");
+INSERT INTO house_affiliation (person_id, name) VALUES (13, "green");
+INSERT INTO house_affiliation (person_id, name) VALUES (14, "yellow");
+INSERT INTO house_affiliation (person_id, name) VALUES (15, "blue");
+INSERT INTO house_affiliation (person_id, name) VALUES (16, "yellow");
+INSERT INTO house_affiliation (person_id, name) VALUES (17, "green");
+INSERT INTO house_affiliation (person_id, name) VALUES (18, "green");
+INSERT INTO house_affiliation (person_id, name) VALUES (19, "yellow");
+INSERT INTO house_affiliation (person_id, name) VALUES (20, "red");
+
+CREATE table research_pairs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    person1_id INTEGER,
+    person2_id INTEGER);
+
+INSERT INTO research_pairs (person1_id, person2_id) VALUES (1,7);
+INSERT INTO research_pairs (person1_id, person2_id) VALUES (5,13);
+INSERT INTO research_pairs (person1_id, person2_id) VALUES (3,9);
+INSERT INTO research_pairs (person1_id, person2_id) VALUES (17,20);
+INSERT INTO research_pairs (person1_id, person2_id) VALUES (2,11);
+INSERT INTO research_pairs (person1_id, person2_id) VALUES (10,16);
+INSERT INTO research_pairs (person1_id, person2_id) VALUES (8,19);
+INSERT INTO research_pairs (person1_id, person2_id) VALUES (6,15);
+INSERT INTO research_pairs (person1_id, person2_id) VALUES (4,12);
+INSERT INTO research_pairs (person1_id, person2_id) VALUES (14,18);
+
+-- I am using the AVG function to figure out the average age of all of the people in the table.
+
+SELECT ROUND(AVG(persons.age)) AS avg_age
+    FROM persons;
+
+-- I used the COUNT function to count how many people are in the house and then used GROUP BY to seperate the numbers by house color.
+
+SELECT name, COUNT(*) AS count
+    FROM house_affiliation
+    GROUP BY name;
+
+--I am using the JOIN function to combine data between the house affiliation table and persons table to figure out which house has the highest AVG age.
+
+SELECT ha.name AS house_name, AVG(p.age) AS average_age
+FROM house_affiliation ha
+JOIN persons p ON ha.person_id = p.id
+GROUP BY ha.name
+ORDER BY average_age DESC
+LIMIT 1;
+
+-- I am using a self JOIN to combine the research pair table with itself to display the pair names and then using that to find out the highest combined age from the research pairs.
+
+SELECT rp.id AS pair_id, p1.fullname AS person1_name, p2.fullname AS person2_name, (p1.age + p2.age) AS sum_age
+FROM research_pairs rp
+JOIN persons p1 ON rp.person1_id = p1.id
+JOIN persons p2 ON rp.person2_id = p2.id
+ORDER BY sum_age DESC
+LIMIT 1;
+
+-- I am using a JOIN to combine the house affiliation and persons tables to COUNT how many people are in the red house and their hometown is Olympus
+
+SELECT COUNT(*) AS 'red house and olympus'
+FROM house_affiliation ha
+JOIN persons p ON ha.person_id = p.id
+WHERE ha.name = 'red' AND p.hometown = 'Olympus';
+
+-- Finally, I am using the same JOIN to to figure out who is the youngest person in the yellow house and their hometown is Greece.
+
+SELECT p.fullname, p.age
+FROM persons p
+JOIN house_affiliation ha ON p.id = ha.person_id
+WHERE ha.name = 'yellow' AND p.hometown = 'Greece'
+ORDER BY p.age ASC
+LIMIT 1;
